@@ -1,3 +1,5 @@
 streamlit
 pillow
 pyperclip
+matplotlib.pyplot
+numpy
