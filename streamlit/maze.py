@@ -4,8 +4,6 @@ from PIL import Image, ImageDraw
 import random
 import streamlit as st
 from io import BytesIO
-import pyperclip
-import base64
 
 # Maze size
 CELL_SIZE = 20
@@ -116,12 +114,6 @@ def draw_path(draw, entrance, exit):
         y2 = next_cell.y * CELL_SIZE + CELL_SIZE + CELL_SIZE // 2
         draw.line((x1, y1, x2, y2), fill=BLUE, width=1)
 
-def image_to_base64(img):
-    buffered = BytesIO()
-    img.save(buffered, format="PNG")
-    img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
-    return img_str
-
 def main():
     st.title("Maze Generator")
 
@@ -161,16 +153,6 @@ def main():
             data=buffer,
             file_name="maze.png",
             mime="image/png"
-        )
-
-        img_base64 = image_to_base64(img)
-        pyperclip.copy(img_base64)
-
-        st.button('Copy to Clipboard')
-
-        st.markdown(
-            f'<img src="data:image/png;base64,{img_base64}" style="display:none;">',
-            unsafe_allow_html=True,
         )
 
 if __name__ == "__main__":
