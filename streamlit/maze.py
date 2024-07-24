@@ -88,14 +88,16 @@ def draw_maze(cells, draw):
                 draw.line([(x1, y1), (x1, y2)], fill=BLACK)
 
 def draw_entrance(draw, entrance):
-    x1 = entrance.x * CELL_SIZE + CELL_SIZE
-    y1 = entrance.y * CELL_SIZE + CELL_SIZE
-    draw.rectangle([x1, y1, x1 + CELL_SIZE, y1 + CELL_SIZE], fill=GREEN)
+    x = entrance.x * CELL_SIZE + CELL_SIZE // 2
+    y = entrance.y * CELL_SIZE + CELL_SIZE // 2
+    radius = CELL_SIZE // 4
+    draw.ellipse([(x - radius, y - radius), (x + radius, y + radius)], fill=GREEN)
 
 def draw_exit(draw, exit):
-    x1 = exit.x * CELL_SIZE + CELL_SIZE
-    y1 = exit.y * CELL_SIZE + CELL_SIZE
-    draw.rectangle([x1, y1, x1 + CELL_SIZE, y1 + CELL_SIZE], fill=RED)
+    x = exit.x * CELL_SIZE + CELL_SIZE + CELL_SIZE // 2
+    y = exit.y * CELL_SIZE + CELL_SIZE + CELL_SIZE // 2
+    radius = CELL_SIZE // 4
+    draw.ellipse([(x - radius, y - radius), (x + radius, y + radius)], fill=RED)
 
 def draw_path(draw, entrance, exit):
     current = exit
