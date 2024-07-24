@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "maze"
+version = "1.0.0"
+description = "Maze generator"
+authors = ["Erez <5103874+kaerez@users.noreply.github.com>"]
+license = "Non commercial use. All reuse must provide credit and be provided freely."
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pillow = "^10.4.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+
+# content below this line added by briefcase convert
+# This project was generated with 0.3.19 using template: https://github.com/beeware/briefcase-template@v0.3.19
+[tool.briefcase]
+project_name = "Maze"
+bundle = "il.co.kalman.www"
+version = "0.0.1"
+url = "https://www.kalman.co.il"
+license.file = "LICENSE"
+author = "Erez Kalman"
+author_email = "-"
+
+[tool.briefcase.app.maze]
+formal_name = "Maze"
+description = "Maze Generator"
+long_description = """More details about the app should go here.
+"""
+sources = [
+    "maze",
+]
+test_sources = [
+    "tests",
+]
+
