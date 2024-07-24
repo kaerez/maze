@@ -4,6 +4,8 @@ from PIL import Image, ImageDraw
 import random
 import streamlit as st
 from io import BytesIO
+import pyperclip
+import base64
 
 # Maze size
 CELL_SIZE = 20
@@ -88,14 +90,14 @@ def draw_maze(cells, draw):
                 draw.line([(x1, y1), (x1, y2)], fill=BLACK)
 
 def draw_entrance(draw, entrance):
-    x1 = entrance.x * CELL_SIZE + CELL_SIZE
-    y1 = entrance.y * CELL_SIZE + CELL_SIZE
-    draw.rectangle([x1, y1, x1 + CELL_SIZE, y1 + CELL_SIZE], fill=GREEN)
+    x1 = entrance.x * CELL_SIZE + CELL_SIZE + CELL_SIZE // 2
+    y1 = entrance.y * CELL_SIZE + CELL_SIZE + CELL_SIZE // 2
+    draw.ellipse([x1 - 5, y1 - 5, x1 + 5, y1 + 5], fill=GREEN, outline=GREEN)
 
 def draw_exit(draw, exit):
-    x1 = exit.x * CELL_SIZE + CELL_SIZE
-    y1 = exit.y * CELL_SIZE + CELL_SIZE
-    draw.rectangle([x1, y1, x1 + CELL_SIZE, y1 + CELL_SIZE], fill=RED)
+    x1 = exit.x * CELL_SIZE + CELL_SIZE + CELL_SIZE // 2
+    y1 = exit.y * CELL_SIZE + CELL_SIZE + CELL_SIZE // 2
+    draw.ellipse([x1 - 5, y1 - 5, x1 + 5, y1 + 5], fill=RED, outline=RED)
 
 def draw_path(draw, entrance, exit):
     current = exit
@@ -114,12 +116,18 @@ def draw_path(draw, entrance, exit):
         y2 = next_cell.y * CELL_SIZE + CELL_SIZE + CELL_SIZE // 2
         draw.line((x1, y1, x2, y2), fill=BLUE, width=1)
 
+def image_to_base64(img):
+    buffered = BytesIO()
+    img.save(buffered, format="PNG")
+    img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
+    return img_str
+
 def main():
     st.title("Maze Generator")
 
-    show_entrance = st.checkbox('Show entrance marker (-i)')
-    show_exit = st.checkbox('Show exit marker (-o)')
-    show_answer = st.checkbox('Show answer (-a)')
+    show_entrance = st.checkbox('Show entrance')
+    show_exit = st.checkbox('Show exit')
+    show_answer = st.checkbox('Show answer')
     generate_button = st.button('Generate Maze')
 
     if generate_button:
@@ -153,6 +161,16 @@ def main():
             data=buffer,
             file_name="maze.png",
             mime="image/png"
+        )
+
+        img_base64 = image_to_base64(img)
+        pyperclip.copy(img_base64)
+
+        st.button('Copy to Clipboard')
+
+        st.markdown(
+            f'<img src="data:image/png;base64,{img_base64}" style="display:none;">',
+            unsafe_allow_html=True,
         )
 
 if __name__ == "__main__":
