@@ -4,6 +4,7 @@ from PIL import Image, ImageDraw
 import random
 import streamlit as st
 from io import BytesIO
+import pyperclip
 
 # Maze size
 CELL_SIZE = 20
@@ -90,13 +91,13 @@ def draw_maze(cells, draw):
 def draw_entrance(draw, entrance):
     x = entrance.x * CELL_SIZE + CELL_SIZE // 2
     y = entrance.y * CELL_SIZE + CELL_SIZE // 2
-    radius = CELL_SIZE // 4
+    radius = CELL_SIZE // 8
     draw.ellipse([(x - radius, y - radius), (x + radius, y + radius)], fill=GREEN)
 
 def draw_exit(draw, exit):
     x = exit.x * CELL_SIZE + CELL_SIZE + CELL_SIZE // 2
     y = exit.y * CELL_SIZE + CELL_SIZE + CELL_SIZE // 2
-    radius = CELL_SIZE // 4
+    radius = CELL_SIZE // 8
     draw.ellipse([(x - radius, y - radius), (x + radius, y + radius)], fill=RED)
 
 def draw_path(draw, entrance, exit):
@@ -116,12 +117,19 @@ def draw_path(draw, entrance, exit):
         y2 = next_cell.y * CELL_SIZE + CELL_SIZE + CELL_SIZE // 2
         draw.line((x1, y1, x2, y2), fill=BLUE, width=1)
 
+def copy_image_to_clipboard(image):
+    buffer = BytesIO()
+    image.save(buffer, format='PNG')
+    buffer.seek(0)
+    img_str = buffer.getvalue()
+    pyperclip.copy(img_str)
+
 def main():
     st.title("Maze Generator")
 
-    show_entrance = st.checkbox('Show entrance marker (-i)')
-    show_exit = st.checkbox('Show exit marker (-o)')
-    show_answer = st.checkbox('Show answer (-a)')
+    show_entrance = st.checkbox('Show entrance marker')
+    show_exit = st.checkbox('Show exit marker')
+    show_answer = st.checkbox('Show answer')
     generate_button = st.button('Generate Maze')
 
     if generate_button:
@@ -156,6 +164,10 @@ def main():
             file_name="maze.png",
             mime="image/png"
         )
+        
+        if st.button('Copy Maze to Clipboard'):
+            copy_image_to_clipboard(img)
+            st.success('Maze copied to clipboard!')
 
 if __name__ == "__main__":
     main()
